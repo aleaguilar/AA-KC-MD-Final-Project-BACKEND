@@ -8,8 +8,11 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from models import db
+from activecampaign.client import Client
+
 #from models import Person
 
+client = Client('https://libertyexpress.api-us1.com', os.environ.get('AC_KEY'))
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
@@ -36,6 +39,15 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@app.route('/subscribe', methods=['POST'])
+def email_subscriber():
+
+    body = request.get_json()
+
+    response = client.contacts.create_a_contact(body)    
+
+    return jsonify({'message':"Contact added"}), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
