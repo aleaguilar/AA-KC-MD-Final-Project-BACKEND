@@ -19,6 +19,7 @@ gunicorn = "*"
 mysqlclient = "*"
 requests = "*"
 activecampaign-python = "*"
+flask-jwt-simple = "*"
 
 [requires]
 python_version = "3.6"
