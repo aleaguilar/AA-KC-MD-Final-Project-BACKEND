@@ -37,6 +37,7 @@ def sitemap():
     return generate_sitemap(app)
 
 @app.route('/hello', methods=['POST', 'GET'])
+@jwt_required
 def handle_hello():
 
     response_body = {
@@ -47,6 +48,7 @@ def handle_hello():
 
 @app.route('/customers', methods=['GET'])
 def handle_customers():
+    print("something")
     all_customers = Customer.query.all()
     all_customers = list(map(lambda x: x.serialize(), all_customers))
     return jsonify(all_customers), 200
@@ -94,11 +96,12 @@ def login():
     if not password:
         return jsonify({"msg": "Please provide a password"}), 400
 
-    if email != 'test' or password != 'test':
-        return jsonify({"msg": "Bad username or password"}), 401
+    boboo =  Customer.query.filter_by(email=email, password=password).first()
+    if boboo == None:
+         return jsonify({"msg": "Bad boboo or password"}), 401
 
     # Identity can be any data that is json serializable
-    ret = {'jwt': create_jwt(identity=email)}
+    ret = {'jwt': create_jwt(identity=email),"name":boboo.name}
     return jsonify(ret), 200
 
 
@@ -128,4 +131,4 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=PORT, debug=False)
 
 
-    
+
