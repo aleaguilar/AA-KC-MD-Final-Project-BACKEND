@@ -131,3 +131,14 @@ class Products(db.Model):
 
 # class ProhibitedProducts(db.Model):
 # class ShippingRates(db.Model):
+
+class Login(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+
+    def serialize(self):
+        return {
+        "email": self.email,
+        "password": self.password
+        }
